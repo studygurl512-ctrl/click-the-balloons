@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday 🎂</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      background: radial-gradient(circle at top, #2b0000, #050505 75%);
+      color: #ffd700;
+      text-align: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .glitter {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,215,0,0.9) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,50,50,0.7) 1px, transparent 1px);
+      background-size: 90px 90px, 130px 130px, 170px 170px;
+      animation: glitterMove 8s linear infinite;
+      opacity: 0.3;
+      z-index: 0;
+    }
+
+    @keyframes glitterMove {
+      from { background-position: 0 0, 0 0, 0 0; }
+      to { background-position: 90px 90px, 130px 130px, 170px 170px; }
+    }
+
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding: 35px 18px;
+      position: relative;
+      z-index: 1;
+      animation: fadePage 0.7s ease forwards;
+    }
+
+    .active { display: block; }
+
+    @keyframes fadePage {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      color: #ff3333;
+      font-size: 2.3rem;
+      text-shadow: 0 0 15px #ff0000;
+    }
+
+    h2 { font-size: 1.7rem; }
+
+    p {
+      color: white;
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: rgba(15, 15, 15, 0.92);
+      border: 2px solid #ffd700;
+      max-width: 750px;
+      margin: 25px auto;
+      padding: 22px;
+      border-radius: 25px;
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.25);
+    }
+
+    button {
+      background: linear-gradient(145deg, #ff1f1f, #9e0000);
+      color: white;
+      border: none;
+      padding: 14px 22px;
+      border-radius: 25px;
+      margin: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    }
+
+    button:hover {
+      background: #ffd700;
+      color: black;
+      transform: scale(1.05);
+    }
+
+    .back-btn {
+      background: #222;
+      border: 1px solid #ffd700;
+    }
+
+    .playlist {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    .playlist-song {
+      width: 100%;
+      background: #181818;
+      border: 1px solid #ffd700;
+      color: white;
+      text-align: left;
+      padding: 15px 18px;
+      border-radius: 18px;
+    }
+
+    .playlist-song span {
+      color: #ffd700;
+      margin-right: 12px;
+      font-weight: bold;
+    }
+
+    #nowPlaying {
+      color: #ffd700;
+      font-size: 1rem;
+    }
+
+    .gift-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      max-width: 500px;
+      margin: 20px auto;
+    }
+
+    .gift-choice {
+      padding: 25px;
+      border-radius: 22px;
+      background: #181818;
+      border: 1px solid #ffd700;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .gift-choice:hover {
+      transform: scale(1.03);
+      background: #2b0000;
+    }
+
+    .gift-media {
+      width: 280px;
+      max-width: 95%;
+      border-radius: 20px;
+      margin-top: 15px;
+      border: 2px solid #ffd700;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.25);
+    }
+
+    .balloons {
+      position: relative;
+      height: 430px;
+      overflow: hidden;
+      margin: 15px 0;
+    }
+
+    .balloon {
+      width: 70px;
+      height: 92px;
+      border-radius: 50% 50% 45% 45%;
+      cursor: pointer;
+      position: absolute;
+      bottom: -150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      animation: floatUp 12s linear infinite;
+      box-shadow:
+        inset -10px -15px 25px rgba(0,0,0,0.25),
+        inset 8px 8px 18px rgba(255,255,255,0.35),
+        0 0 25px rgba(255,215,0,0.25);
+    }
+
+    .balloon::before {
+      content: "";
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 16px;
+      height: 24px;
+      background: rgba(255,255,255,0.45);
+      border-radius: 50%;
+      transform: rotate(25deg);
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      bottom: -48px;
+      width: 2px;
+      height: 48px;
+      background: rgba(255,215,0,0.9);
+    }
+
+    .red1 { background: linear-gradient(145deg, #ff4b4b, #8b0000); left: 5%; animation-delay: 0s; }
+    .red2 { background: linear-gradient(145deg, #ff1f1f, #b30000); left: 25%; animation-delay: 3s; }
+    .red3 { background: linear-gradient(145deg, #ff6b6b, #cc0000); left: 45%; animation-delay: 6s; }
+    .red4 { background: linear-gradient(145deg, #d90429, #7a0000); left: 65%; animation-delay: 2s; }
+
+    .yellow1 { background: linear-gradient(145deg, #ffe66d, #f4b400); left: 15%; animation-delay: 1.5s; color: black; }
+    .yellow2 { background: linear-gradient(145deg, #ffd60a, #ff9f1c); left: 35%; animation-delay: 4.5s; color: black; }
+    .yellow3 { background: linear-gradient(145deg, #fff176, #fbc02d); left: 55%; animation-delay: 7s; color: black; }
+    .yellow4 { background: linear-gradient(145deg, #ffea00, #f57f17); left: 75%; animation-delay: 5.5s; color: black; }
+
+    .black1 { background: linear-gradient(145deg, #333, #050505); left: 85%; animation-delay: 2.5s; border: 1px solid #ffd700; }
+    .black2 { background: linear-gradient(145deg, #444, #111); left: 92%; animation-delay: 8s; border: 1px solid #ffd700; }
+
+    @keyframes floatUp {
+      0% { bottom: -150px; opacity: 0; transform: translateX(0) rotate(0deg); }
+      10% { opacity: 1; }
+      50% { transform: translateX(22px) rotate(4deg); }
+      90% { opacity: 1; }
+      100% { bottom: 110%; opacity: 0; transform: translateX(-22px) rotate(-4deg); }
+    }
+
+    #balloonImage {
+      width: 280px;
+      max-width: 95%;
+      border-radius: 20px;
+      margin-top: 15px;
+      display: none;
+      border: 2px solid #ff2b2b;
+      box-shadow: 0 0 20px rgba(255,0,0,0.4);
+    }
+
+    #imageCaption {
+      color: white;
+      margin-top: 12px;
+      font-size: 1rem;
+      opacity: 0;
+    }
+
+    .fade-in {
+      animation: aestheticFade 1.2s ease forwards;
+    }
+
+    @keyframes aestheticFade {
+      from { opacity: 0; transform: translateY(15px); filter: blur(4px); }
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 10px;
+      height: 18px;
+      animation: fall 3s linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    @media (max-width: 600px) {
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.4rem; }
+      .card { padding: 18px; }
+      .balloons { height: 390px; }
+      .balloon {
+        width: 58px;
+        height: 78px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glitter"></div>
+
+  <!-- PAGE 1: WELCOME -->
+  <section class="page active" id="page1">
+    <div class="card">
+      <!-- CHANGE HIS NAME HERE -->
+      <h1>Happy Birthday, Cheesekaaiiii 🎂</h1>
+
+      <!-- CHANGE INTRO HERE -->
+      <p>
+        I made this tiny birthday surprise for you.  
+        Open it slowly, choose a song, pick your gift, then enjoy the balloon party.
+      </p>
+
+      <button onclick="goToPage('page2')">Start the surprise ✨</button>
+    </div>
+  </section>
+
+  <!-- PAGE 2: PLAYLIST -->
+  <section class="page" id="page2">
+    <div class="card">
+      <h2>Choose your birthday song 🎵</h2>
+      <p>Pick one before moving to your gift.</p>
+
+      <div class="playlist">
+        <button class="playlist-song" onclick="playSong('Proud of You.mp3', 'Proud of You')">
+          <span>01</span> Proud of You
+        </button>
+
+        <button class="playlist-song" onclick="playSong('RUMI JINU - Free.mp3', 'Free')">
+          <span>02</span> Free
+        </button>
+
+        <button class="playlist-song" onclick="playSong('Count On Me.mp3', 'Count On Me')">
+          <span>03</span> Count On Me
+        </button>
+
+        <button class="playlist-song" onclick="playSong('Dolia _The Mermaid song.mp3', 'The Mermaid Song')">
+          <span>04</span> The Mermaid Song
+        </button>
+      </div>
+
+      <p id="nowPlaying">No song playing yet</p>
+
+      <button onclick="stopSong()">Stop Music ⏸</button>
+      <button onclick="goToPage('page3')">Next: choose gift 🎁</button>
+      <br>
+      <button class="back-btn" onclick="goToPage('page1')">Back</button>
+
+      <audio id="musicPlayer"></audio>
+    </div>
+  </section>
+
+  <!-- PAGE 3: GIFT PATH -->
+  <section class="page" id="page3">
+    <div class="card">
+      <h2>Choose your gift path 🎁</h2>
+      <p>Pick one first. You can come back and open the others too.</p>
+
+      <div class="gift-grid">
+        <div class="gift-choice" onclick="openGift('hug')">
+          <h2>Virtual Hug 🫂</h2>
+          <p>A warm little video.</p>
+        </div>
+
+        <div class="gift-choice" onclick="openGift('cake')">
+          <h2>Cheesecake 🍰</h2>
+          <p>Because normal cake is apparently not good enough.</p>
+        </div>
+
+        <div class="gift-choice" onclick="openGift('letter')">
+          <h2>Letter 💌</h2>
+          <p>A small message for you.</p>
+        </div>
+      </div>
+
+      <button class="back-btn" onclick="goToPage('page2')">Back</button>
+    </div>
+  </section>
+
+  <!-- PAGE 4: VIEW GIFT -->
+  <section class="page" id="page4">
+    <div class="card" id="giftContent">
+      <!-- Gift content appears here -->
+    </div>
+
+    <button onclick="goToPage('page5')">Next: balloon party 🎈</button>
+    <button class="back-btn" onclick="goToPage('page3')">Choose another gift</button>
+  </section>
+
+  <!-- PAGE 5: BALLOON PARTY -->
+  <section class="page" id="page5">
+    <h1>Balloon Memory Party 🎈✨</h1>
+    <p>Tap the floating balloons.</p>
+
+    <div class="balloons">
+      <div class="balloon red1" onclick="showBalloon(0)">✨</div>
+      <div class="balloon yellow1" onclick="showBalloon(1)">✨</div>
+      <div class="balloon red2" onclick="showBalloon(2)">✨</div>
+      <div class="balloon yellow2" onclick="showBalloon(3)">✨</div>
+      <div class="balloon red3" onclick="showBalloon(4)">✨</div>
+      <div class="balloon yellow3" onclick="showBalloon(5)">✨</div>
+      <div class="balloon red4" onclick="showBalloon(6)">✨</div>
+      <div class="balloon yellow4" onclick="showBalloon(7)">✨</div>
+      <div class="balloon black1" onclick="showBalloon(8)">✨</div>
+      <div class="balloon black2" onclick="showBalloon(9)">✨</div>
+    </div>
+
+    <div class="card">
+      <h2 id="messageBox">Tap a balloon 💌</h2>
+      <img id="balloonImage" src="">
+      <p id="imageCaption"></p>
+    </div>
+
+    <button class="back-btn" onclick="goToPage('page3')">Back to gifts</button>
+  </section>
+
+  <script>
+    function goToPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+      document.getElementById(pageId).classList.add("active");
+      window.scrollTo(0, 0);
+      createConfetti();
+    }
+
+    function playSong(songFile, songTitle) {
+      const player = document.getElementById("musicPlayer");
+      player.src = songFile;
+      player.play();
+      document.getElementById("nowPlaying").innerText = "Now playing: " + songTitle + " 🎧";
+    }
+
+    function stopSong() {
+      const player = document.getElementById("musicPlayer");
+      player.pause();
+      player.currentTime = 0;
+      document.getElementById("nowPlaying").innerText = "Music stopped ⏸";
+    }
+
+    function openGift(type) {
+      const giftContent = document.getElementById("giftContent");
+
+      if (type === "hug") {
+        giftContent.innerHTML = `
+          <h2>Virtual Hug 🫂</h2>
+          <p>This is the warmest hug ever, saved just for you.</p>
+          <video class="gift-media" controls>
+            <source src="hug.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        `;
+      }
+
+      if (type === "cake") {
+        giftContent.innerHTML = `
+          <h2>Birthday Cheesecake 🍰</h2>
+          <p>Even tho u don't like sweets, u like 2, cheesecakes and redvelvet cakes, so we'll change the birthday cake ritual to a cheesecake🙂‍↕️.</p>
+          <img src="cake.jpg" class="gift-media">
+        `;
+      }
+
+      if (type === "letter") {
+        giftContent.innerHTML = `
+          <h2>Little Letter 💌</h2>
+          <img src="letter.jpg" class="gift-media">
+          <p>
+            Hello Cheese,<br><br>
+            I just wanted to remind you that you are special, appreciated,
+            and someone I am really happy to know.
+            I hope this birthday brings you peace, joy, and everything your heart needs!
+          </p>
+        `;
+      }
+
+      goToPage("page4");
+    }
+
+    const balloonMessages = [
+      "u do so much for everyone around u, and I wish u could see urself the way we see u, kind, strong, and truly special. I'm really lucky to be ur friend!",
+      "u act all serious and responsible, but I've seen ur chaotic side... don't worry, ur reputation is safe with me (for now😈)",
+      "Reminder: just because u don't say much about urself doesn't mean there's nothing to appreciate. There's a lot. u just don't look closely enough.",
+      "If life gets overwhelming, just remember: u're allowed to rest too. u don't always have to be the strong one.",
+      "I still don't understand how someone can hate sweets this much... like who hurt you??😭 But fine, more for me I guess💃🏻",
+      "Happy birthday to the guy whose main hobby is bullying me for entertainment👊🏻🙂 You're lucky I'm nice... and short... apparently🙄",
+      "u: says something just to tease me Me: reacts u:😏🤣 ...this cycle needs to be studied.",
+      "Despite all ur teasing, I still appreciate you... which honestly says a lot about MY patience(not short at all).",
+      "Even on days when u feel like u're not doing enough, u are. More than enough. More than most.",
+      "u can literally sit there, say nothing, do nothing... and I'd still choose to stay chilling silently and calmly together. Hm?"
+    ];
+
+    const balloonImages = [
+      "photo1.jpg",
+      "photo10.jpg",
+      "photo3.jpg",
+      "photo4.jpg",
+      "photo5.jpg",
+      "photo6.jpg",
+      "photo7.jpg",
+      "photo8.jpg",
+      "photo9.jpg",
+      "photo2.jpg"
+    ];
+
+    const balloonCaptions = [
+      "first time i met Mr.MothGuide",
+      "Talk about the Glow-Up",
+      "I asked Ai once to make our skykids look real, it bullied me too...",
+      "A silly photoshoot we took At a friend's birthday..kyo tho..what's that😭",
+      "This picture was one of ur favorites",
+      "Shot me and laughed...poor me tsk tsk tsk",
+      "This always makes me smile, so beautifull",
+      "silly you, both accounts are you😂",
+      "This was from ur birthday party!",
+      "This one is special surprise u made🥹"
+    ];
+
+    function showBalloon(index) {
+      const message = document.getElementById("messageBox");
+      const img = document.getElementById("balloonImage");
+      const caption = document.getElementById("imageCaption");
+
+      message.innerText = balloonMessages[index];
+      img.src = balloonImages[index];
+      img.style.display = "inline-block";
+      caption.innerText = balloonCaptions[index];
+
+      message.classList.remove("fade-in");
+      img.classList.remove("fade-in");
+      caption.classList.remove("fade-in");
+
+      void message.offsetWidth;
+      void img.offsetWidth;
+      void caption.offsetWidth;
+
+      message.classList.add("fade-in");
+      img.classList.add("fade-in");
+      caption.classList.add("fade-in");
+
+      createConfetti();
+    }
+
+    function createConfetti() {
+      const colors = ["#ff1f1f", "#ffd700", "#111111", "#ff6b6b", "#fff176"];
+
+      for (let i = 0; i < 40; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        confetti.style.transform = "rotate(" + Math.random() * 360 + "deg)";
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 4000);
+      }
+    }
+  </script>
+</body>
+</html>
