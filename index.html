@@ -10,7 +10,7 @@
 
     body {
       margin: 0;
-      font-family: "Comic Sans MS", cursive, sans-serif;
+      font-family: "Segoe UI", "Trebuchet MS", Arial, sans-serif;
       background: radial-gradient(circle at top, #2b0000, #050505 75%);
       color: #ffd700;
       text-align: center;
@@ -28,7 +28,7 @@
         radial-gradient(circle, rgba(255,50,50,0.7) 1px, transparent 1px);
       background-size: 90px 90px, 130px 130px, 170px 170px;
       animation: glitterMove 8s linear infinite;
-      opacity: 0.3;
+      opacity: 0.28;
       z-index: 0;
     }
 
@@ -57,6 +57,7 @@
       color: #ff3333;
       font-size: 2.3rem;
       text-shadow: 0 0 15px #ff0000;
+      letter-spacing: 0.5px;
     }
 
     h2 { font-size: 1.7rem; }
@@ -228,6 +229,13 @@
       100% { bottom: 110%; opacity: 0; transform: translateX(-22px) rotate(-4deg); }
     }
 
+    #messageBox {
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     #balloonImage {
       width: 280px;
       max-width: 95%;
@@ -243,6 +251,7 @@
       margin-top: 12px;
       font-size: 1rem;
       opacity: 0;
+      min-height: 30px;
     }
 
     .fade-in {
@@ -284,23 +293,17 @@
 <body>
   <div class="glitter"></div>
 
-  <!-- PAGE 1: WELCOME -->
   <section class="page active" id="page1">
     <div class="card">
-      <!-- CHANGE HIS NAME HERE -->
-      <h1>Happy Birthday, Cheesekaaiiii 🎂</h1>
-
-      <!-- CHANGE INTRO HERE -->
+      <h1>Happy Birthday, His Name 🎂</h1>
       <p>
         I made this tiny birthday surprise for you.  
-        Open it slowly, choose a song, pick your gift, then enjoy the balloon party.
+        Open it slowly, choose a song, pick your gift, then enter the balloon party.
       </p>
-
       <button onclick="goToPage('page2')">Start the surprise ✨</button>
     </div>
   </section>
 
-  <!-- PAGE 2: PLAYLIST -->
   <section class="page" id="page2">
     <div class="card">
       <h2>Choose your birthday song 🎵</h2>
@@ -335,7 +338,6 @@
     </div>
   </section>
 
-  <!-- PAGE 3: GIFT PATH -->
   <section class="page" id="page3">
     <div class="card">
       <h2>Choose your gift path 🎁</h2>
@@ -362,17 +364,13 @@
     </div>
   </section>
 
-  <!-- PAGE 4: VIEW GIFT -->
   <section class="page" id="page4">
-    <div class="card" id="giftContent">
-      <!-- Gift content appears here -->
-    </div>
+    <div class="card" id="giftContent"></div>
 
     <button onclick="goToPage('page5')">Next: balloon party 🎈</button>
     <button class="back-btn" onclick="goToPage('page3')">Choose another gift</button>
   </section>
 
-  <!-- PAGE 5: BALLOON PARTY -->
   <section class="page" id="page5">
     <h1>Balloon Memory Party 🎈✨</h1>
     <p>Tap the floating balloons.</p>
@@ -498,29 +496,46 @@
       "This one is special surprise u made🥹"
     ];
 
+    const preloadedImages = [];
+
+    balloonImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+      preloadedImages.push(img);
+    });
+
     function showBalloon(index) {
       const message = document.getElementById("messageBox");
       const img = document.getElementById("balloonImage");
       const caption = document.getElementById("imageCaption");
 
-      message.innerText = balloonMessages[index];
-      img.src = balloonImages[index];
-      img.style.display = "inline-block";
-      caption.innerText = balloonCaptions[index];
+      message.innerText = "Memory loading... ✨";
+      caption.innerText = "";
+      img.style.display = "none";
 
-      message.classList.remove("fade-in");
-      img.classList.remove("fade-in");
-      caption.classList.remove("fade-in");
+      const newImage = new Image();
+      newImage.src = balloonImages[index];
 
-      void message.offsetWidth;
-      void img.offsetWidth;
-      void caption.offsetWidth;
+      newImage.onload = function () {
+        message.innerText = balloonMessages[index];
+        img.src = balloonImages[index];
+        img.style.display = "inline-block";
+        caption.innerText = balloonCaptions[index];
 
-      message.classList.add("fade-in");
-      img.classList.add("fade-in");
-      caption.classList.add("fade-in");
+        message.classList.remove("fade-in");
+        img.classList.remove("fade-in");
+        caption.classList.remove("fade-in");
 
-      createConfetti();
+        void message.offsetWidth;
+        void img.offsetWidth;
+        void caption.offsetWidth;
+
+        message.classList.add("fade-in");
+        img.classList.add("fade-in");
+        caption.classList.add("fade-in");
+
+        createConfetti();
+      };
     }
 
     function createConfetti() {
